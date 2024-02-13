@@ -4,12 +4,12 @@ namespace app\controllers;
 
 use app\models\LoginForm;
 use app\models\MoneyPrizeSelection;
-use app\models\PhysicalItemPrize;
-use app\models\PhysicalItemsPrizeSelection;
+use app\models\GiftPrize;
+use app\models\GiftPrizesSelection;
 use app\models\PointsPrizeSelection;
 use app\models\User;
 use app\models\UserMoney;
-use app\models\UserPhysicalItems;
+use app\models\UserGifts;
 use app\models\UserPoints;
 use Error;
 use Yii;
@@ -93,16 +93,11 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        // if (!Yii::$app->user->isGuest) {
-        //     return $this->goHome();
-        // }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         }
 
-        // $model->password = '';
         return $this->render('login', [
             'model' => $model,
         ]);
@@ -139,7 +134,7 @@ class SiteController extends Controller
         $types = [
             static::TYPE_POINTS,
         ];
-        if (PhysicalItemsPrizeSelection::isAvailable()) {
+        if (GiftPrizesSelection::isAvailable()) {
 
             $types[] = static::TYPE_GIFT;
         }
@@ -154,17 +149,13 @@ class SiteController extends Controller
                 throw new Error('Unknown raffle type');
                 break;
             case static::TYPE_GIFT:
-                $result = PhysicalItemsPrizeSelection::process($user);
-
+                $result = GiftPrizesSelection::process($user);
                 break;
             case static::TYPE_MONEY:
                 $result = MoneyPrizeSelection::process($user);
-                print_r($result);
-
                 break;
             case static::TYPE_POINTS:
                 $result = PointsPrizeSelection::process($user);
-
                 break;
         }
 
@@ -177,13 +168,15 @@ class SiteController extends Controller
         $user = Yii::$app->user;
         $userPoints = UserPoints::find()->where(['user_id' => $user->id])->sum('points');
         $userBalance = UserMoney::find()->where(['user_id' => $user->id])->sum('amount');
-        $userGifts = UserPhysicalItems::find()->where(['user_id' => $user->id])->all();
+        $allUsersMoneyPrizes= UserMoney::find()->where(['user_id' => $user->id])->all();
+        $userGifts = UserGifts::find()->where(['user_id' => $user->id])->all();
         return $this->render('cabinet',
             [
                 'user' => $user,
                 'userPoints' => $userPoints,
                 'userBalance' => $userBalance,
                 'userGifts' => $userGifts,
+                'allUsersMoneyPrizes' => $allUsersMoneyPrizes,
                 'convertFactor' => 10,
             ]);
     }
@@ -213,13 +206,13 @@ class SiteController extends Controller
     public function actionRefuse()
     {
         $user = User::findOne(Yii::$app->user->getId());
-        $lastGift = UserPhysicalItems::find()
+        $lastGift = UserGifts::find()
             ->where(['user_id' => $user->id])
             ->orderBy(['id' => SORT_DESC])
             ->one();
         $lastGift->delete();
         $currentGiftName = $lastGift->item_name;
-        $giftsWithCurrentName = PhysicalItemPrize::getPrizeByName($currentGiftName);
+        $giftsWithCurrentName = GiftPrize::getPrizeByName($currentGiftName);
         $giftsWithCurrentName->in_stock++;
         $giftsWithCurrentName->save();
         return $this->render('gift/refuse');

@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
  * @property string $name
  * @property int $in_stock
  */
-class PhysicalItemPrize extends ActiveRecord
+class GiftPrize extends ActiveRecord
 {
     /**
      * {@inheritdoc}

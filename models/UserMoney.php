@@ -9,6 +9,7 @@ class UserMoney extends ActiveRecord
 
     const IN_PROCESS = 0;
     const TRANSFERRED = 1;
+
     /**
      * {@inheritdoc}
      */

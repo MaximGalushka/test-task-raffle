@@ -28,7 +28,6 @@ class MoneyPrizeSelection implements PrizeSelectionInterface
             $userMoneyPrize->transfer_status = 0;
             $userMoneyPrize->save();
 
-
             $transaction->commit();
 
             return ['money' => $money];

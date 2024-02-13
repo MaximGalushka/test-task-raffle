@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
  * @property string $item_name
  * @property int $delivery_status
  */
-class UserPhysicalItems extends ActiveRecord
+class UserGifts extends ActiveRecord
 {
     const DELIVERY_STATUS_WAIT = 0;
     const DELIVERY_STATUS_PROCESS = 1;

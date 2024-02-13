@@ -16,7 +16,6 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $rememberMe = true;
-
     private $_user = false;
 
 
@@ -48,14 +47,6 @@ class LoginForm extends Model
         if (!$user || !$user->validatePassword($this->password)) {
             $this->addError($attribute, 'Incorrect password');
         }
-        // var_dump(Yii::$app->security->validatePassword($this->password, $user->password_hash));
-        // if (!$this->hasErrors()) {
-        //     $user = $this->getUser();
-
-        //     if (!$user || !$user->validatePassword($this->password)) {
-        //         $this->addError($attribute, 'Incorrect username or password.');
-        //     }
-        // }
     }
 
     /**

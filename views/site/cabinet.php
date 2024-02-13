@@ -5,8 +5,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <p class="lead">Gifts</p>
+            <p class="lead"><b>Gifts</b></p>
             <ul>
+                <p class="lead">Gifts history:</p>
                 <?php foreach ($userGifts as $gift): ?>
                     <?php
                     $deliveryStatusText = '';
@@ -25,16 +26,33 @@
                             break;
                     }
                     ?>
-                    <li><?= $gift->item_name ?> (Delivery status: <?= $deliveryStatusText ?>)</li>
+                    <li class="d-flex justify-content-between"><mark><b><?= $gift->item_name ?></b></mark> (Delivery status: <?= $deliveryStatusText ?>)</li>
                 <?php endforeach; ?>
             </ul>
         </div>
         <div class="col-md-4">
-             <p class="lead">Money (Balance: <?= $userBalance ?>)</p>
-
+             <p class="lead"><b>Money (Balance: <?= $userBalance ?>)</b></p>
+             <p class="lead">Money prizes history</p>
+            <?php foreach ($allUsersMoneyPrizes as $moneyPrize): ?>
+            <?php
+            $transactionStatus = '';
+            switch ($moneyPrize->transfer_status) {
+                case 0:
+                    $transactionStatus = 'In_process';
+                    break;
+                case 1:
+                    $transactionStatus = 'Transferred';
+                    break;
+                default:
+                    $transactionStatus = 'UNKNOWN STATUS';
+                    break;
+            }
+            ?>
+                <li class="d-flex justify-content-between"><mark><b>Money prize: <?= $moneyPrize->amount ?></b></mark><span>(Transaction status: <?= $transactionStatus ?>)</span></li>
+            <?php endforeach; ?>
         </div>
         <div class="col-md-4">
-            <p class="lead">Points (Balance: <?= $userPoints ?>)</p>
+            <p class="lead"><b>Points (Balance: <?= $userPoints ?>)</b></p>
         </div>
     </div>
 </div>

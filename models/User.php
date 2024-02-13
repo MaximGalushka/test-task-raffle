@@ -19,8 +19,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return 'users';
     }
 
-
-
     /**
      * Finds user by username
      *
@@ -30,13 +28,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public static function findByUsername($username)
     {
         return self::find() ->where(['username' => $username]) ->one();
-        // foreach (self::$users as $user) {
-        //     if (strcasecmp($user['username'], $username) === 0) {
-        //         return new static($user);
-        //     }
-        // }
-
-        // return null;
     }
 
     /**

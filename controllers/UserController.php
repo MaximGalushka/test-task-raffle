@@ -26,10 +26,5 @@ class UserController extends Controller
         ]);
     }
 
-    public function actionRegister()
-    {
-        // Здесь реализуйте метод для регистрации нового пользователя
-    }
 
-    // Другие методы для управления пользователями
 }
